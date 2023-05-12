@@ -23,7 +23,7 @@ app.get('/api/users/:date', async (req, res) => {
         });
       
         response.on('end', () => {
-            if (String(result) == '{"data":"[]","header":{"isSuccessful":true,"resultCode":0,"resultMessage":"success"}}') {
+            if (String(result) == '{"data":"[]","header":{"isSuccessful":true,"resultCode":0,"resultMessage":"success"}}' || String(result).startsWith('<!DOCTYPE html>')) {
                 res.send('업로드 되지 않았거나 잘못된 날짜입니다.');
             }
             else {
