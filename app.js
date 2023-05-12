@@ -1,7 +1,6 @@
 const express = require('express');
 const https = require('https');
 const cors = require('cors');
-
 const app = express();
 
 app.use(cors({
@@ -12,7 +11,7 @@ const server = app.listen(3000, () => {
     console.log('Server Started!')
 })
 
-app.get('/api/setdate/:date', async (req, res) => {
+app.get('/api/users/:date', async (req, res) => {
     var {date} = req.params;
     let res1 = '';
 
@@ -77,7 +76,7 @@ app.get('/api/today', async (req, res) => {
         });
       
         response.on('end', () => {
-            if (String(result) == '{"data":"[]","header":{"isSuccessful":true,"resultCode":0,"resultMessage":"success"}}') {
+            if (String(result) == '{"data":"[]","header":{"isSuccessful":true,"resultCode":0,"resultMessage":"success"}}' || String(result).startsWith('<!DOCTYPE html>')) {
                 let todayT = new Date(); // 현재 날짜와 시간을 나타내는 Date 객체 생성
                 let tomorrowT = new Date(todayT.getTime() + 24 * 60 * 60 * 1000); // 현재 날짜와 1일(24시간)을 더하여 새로운 Date 객체 생성
                 let yyyyT = tomorrowT.getFullYear();
@@ -91,7 +90,7 @@ app.get('/api/today', async (req, res) => {
                     });
                 
                     response.on('end', () => {
-                        if (String(resultT) == '{"data":"[]","header":{"isSuccessful":true,"resultCode":0,"resultMessage":"success"}}') {
+                        if (String(resultT) == '{"data":"[]","header":{"isSuccessful":true,"resultCode":0,"resultMessage":"success"}}' || String(result).startsWith('<!DOCTYPE html>')) {
                             let todayTT = new Date(); // 현재 날짜와 시간을 나타내는 Date 객체 생성
                             let twoDaysLaterTT = new Date(todayTT.getTime() + 2 * 24 * 60 * 60 * 1000); // 현재 날짜와 2일(48시간)을 더하여 새로운 Date 객체 생성
                             let yyyyTT = twoDaysLaterTT.getFullYear();
@@ -105,31 +104,36 @@ app.get('/api/today', async (req, res) => {
                                 });
 
                                 response.on('end', () => {
-                                    console.log(resultTT)
-                                    let data1 = String(resultTT)
-                                    data1 = data1 = data1.replaceAll('\\n', '(CL)');
-                                    const data = data1.replace(/\\/g, '');
-                                    console.log(data)
-                    
-                                    let result1 = data.slice(0, 8); // .slice를 이용하여 " 삭제
-                                    let result2 = result1+data.slice(9,20)// .slice를 이용하여 " 삭제
-                                    let result3 = result2+data.slice(21, data.length-80)
-                                    let result4 = result3+'}]}}]'+data.slice(data.length-73)
-                                    const parsedJson = JSON.parse(result4);
-                                    console.log(parsedJson)
-                                    const insertValues2 = parsedJson.data.map(notice => notice.notice.ops.map(op => op.insert)).flat();
-                    
-                                    for (let i = 0; i < insertValues2.length; i++) {
-                                        insertValues2[i] = insertValues2[i].replace(/\(CL\)/g, '<br>')
+                                    if (String(resultTT) == '{"data":"[]","header":{"isSuccessful":true,"resultCode":0,"resultMessage":"success"}}' || String(result).startsWith('<!DOCTYPE html>')) {
+                                        res.send('업로드 되지 않았거나 잘못된 날짜입니다.');
                                     }
-                    
-                                    for (let i = 0; i < insertValues2.length; i++) {
-                                        if (insertValues2[i].includes(''))
-                                        res1 = res1 + insertValues2[i];
+                                    else {
+                                        console.log(resultTT)
+                                        let data1 = String(resultTT)
+                                        data1 = data1 = data1.replaceAll('\\n', '(CL)');
+                                        const data = data1.replace(/\\/g, '');
+                                        console.log(data)
+                        
+                                        let result1 = data.slice(0, 8); // .slice를 이용하여 " 삭제
+                                        let result2 = result1+data.slice(9,20)// .slice를 이용하여 " 삭제
+                                        let result3 = result2+data.slice(21, data.length-80)
+                                        let result4 = result3+'}]}}]'+data.slice(data.length-73)
+                                        const parsedJson = JSON.parse(result4);
+                                        console.log(parsedJson)
+                                        const insertValues2 = parsedJson.data.map(notice => notice.notice.ops.map(op => op.insert)).flat();
+                        
+                                        for (let i = 0; i < insertValues2.length; i++) {
+                                            insertValues2[i] = insertValues2[i].replace(/\(CL\)/g, '<br>')
+                                        }
+                        
+                                        for (let i = 0; i < insertValues2.length; i++) {
+                                            if (insertValues2[i].includes(''))
+                                            res1 = res1 + insertValues2[i];
+                                        }
+                        
+                                        console.log(res1)
+                                        res.send(`[ ${yyyymmddTwoDaysLater} ]<br>`+res1);
                                     }
-                    
-                                    console.log(res1)
-                                    res.send(`[ ${yyyymmddTwoDaysLater} ]<br>`+res1);
                                 })
                             })
                         }
