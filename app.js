@@ -12,7 +12,7 @@ const server = app.listen(3001, () => {
     console.log('Server Started!')
 })
 
-app.get('/api/users/:date', async (req, res) => {
+app.get('/api/setdate/:date', async (req, res) => {
     var {date} = req.params;
     let res1 = '';
 
