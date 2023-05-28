@@ -110,7 +110,7 @@ app.get('/api/today', async (req, res) => {
                                     if (String(resultTT) == '{"data":"[]","header":{"isSuccessful":true,"resultCode":0,"resultMessage":"success"}}' || String(result).startsWith('<!DOCTYPE html>')) {
                                         let errorMsg = 'No Error Message'
                                         if (String(result) == '{"data":"[]","header":{"isSuccessful":true,"resultCode":0,"resultMessage":"success"}}') errorMsg = 'No Information'
-                                        if (String(result).startsWith('<!DOCTYPE html>')) errorMsg = 'JLS Server Error' console.log(String(result))
+                                        if (String(result).startsWith('<!DOCTYPE html>')) errorMsg = 'JLS Server Error'; console.log(String(result))
                                         res.send(`오류가 발생하였습니다. (${errorMsg})`);
                                     }
                                     else {
