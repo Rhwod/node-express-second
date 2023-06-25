@@ -15,7 +15,7 @@ app.get('/api/users/:date', async (req, res) => {
     var {date} = req.params;
     let res1 = '';
 
-    https.get(`https://www.gojls.com/branch/myservice/homework/note/1579774/${date}`, response => {
+    https.get(`https://www.gojls.com/branch/myservice/homework/note/1579774/${date}?_=1687673841991`, response => {
         let result = '';
       
         response.on('data', chunk => {
