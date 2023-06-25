@@ -19,8 +19,8 @@ app.get('/api/users/:date', async (req, res) => {
         host: `https://www.gojls.com/branch/myservice/homework/note/1579774/${date}`,
         headers: {
             Referer: 'https://www.gojls.com/branch/myjls/homework',
-            'Sec-Fetch-Mode': cors,
-            'X-Requested-With':XMLHttpRequest
+            'Sec-Fetch-Mode': 'cors',
+            'X-Requested-With':'XMLHttpRequest'
         }
       };
 
