@@ -20,7 +20,6 @@ app.get('/api/users/:date', async (req, res) => {
         headers: {
             Referer: 'https://www.gojls.com/branch/myjls/homework',
             'Sec-Fetch-Mode': cors,
-            'Sec-Fetch-Site': same-origin,
             'X-Requested-With':XMLHttpRequest
         }
       };
