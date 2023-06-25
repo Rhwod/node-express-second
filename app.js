@@ -15,7 +15,14 @@ app.get('/api/users/:date', async (req, res) => {
     var {date} = req.params;
     let res1 = '';
 
-    https.get(`https://www.gojls.com/branch/myservice/homework/note/1579774/${date}`, response => {
+    const options = {
+        host: `https://www.gojls.com/branch/myservice/homework/note/1579774/${date}`,
+        headers: {
+            Origin: 'https://gojls.com',
+        }
+      };
+
+    https.get(options, response => {
         let result = '';
       
         response.on('data', chunk => {
